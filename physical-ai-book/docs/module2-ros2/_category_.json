@@ -1,0 +1,8 @@
+{
+  "label": "Module 2: Core Robotics Programming with ROS 2",
+  "position": 2,
+  "link": {
+    "type": "doc",
+    "id": "module2-ros2/index"
+  }
+}

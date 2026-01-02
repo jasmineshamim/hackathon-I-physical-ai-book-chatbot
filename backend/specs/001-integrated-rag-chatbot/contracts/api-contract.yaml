@@ -1,0 +1,308 @@
+openapi: 3.0.0
+info:
+  title: Integrated RAG Chatbot API
+  description: API for a Retrieval-Augmented Generation chatbot that answers questions based on book content
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: Development server
+paths:
+  /health:
+    get:
+      summary: Health check endpoint
+      description: Check if the service is running and healthy
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "healthy"
+                  timestamp:
+                    type: string
+                    format: date-time
+                    example: "2025-01-13T10:00:00Z"
+        '500':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Service unavailable"
+  /query:
+    post:
+      summary: Ask a question about the book content
+      description: Submit a question to be answered based on the book content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - question
+                - book_id
+              properties:
+                question:
+                  type: string
+                  description: The question to ask about the book
+                  example: "What is the main theme of this book?"
+                book_id:
+                  type: string
+                  description: Identifier of the book to query
+                  example: "book-123"
+      responses:
+        '200':
+          description: Successfully retrieved answer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                    description: The answer to the question based on book content
+                    example: "The main theme of this book is..."
+                  confidence_score:
+                    type: number
+                    format: float
+                    description: Confidence score of the answer
+                    minimum: 0.0
+                    maximum: 1.0
+                    example: 0.92
+                  sources:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        chunk_id:
+                          type: string
+                          example: "chunk-456"
+                        page_number:
+                          type: integer
+                          example: 45
+                        section_title:
+                          type: string
+                          example: "Chapter 3: Main Concepts"
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Question and book_id are required"
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Book with ID book-123 not found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Failed to process question"
+  /query-with-selection:
+    post:
+      summary: Ask a question about selected text only
+      description: Submit a question to be answered based only on the provided selected text
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - question
+                - selected_text
+                - book_id
+              properties:
+                question:
+                  type: string
+                  description: The question to ask about the selected text
+                  example: "Explain this concept"
+                selected_text:
+                  type: string
+                  description: The specific text selection to answer from
+                  example: "The concept is described in this selected text..."
+                book_id:
+                  type: string
+                  description: Identifier of the book the selection comes from
+                  example: "book-123"
+      responses:
+        '200':
+          description: Successfully retrieved answer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  answer:
+                    type: string
+                    description: The answer to the question based on selected text
+                    example: "Based on the selected text, the concept means..."
+                  confidence_score:
+                    type: number
+                    format: float
+                    description: Confidence score of the answer
+                    minimum: 0.0
+                    maximum: 1.0
+                    example: 0.87
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Question, selected_text, and book_id are required"
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Book with ID book-123 not found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Failed to process question"
+  /ingest-book:
+    post:
+      summary: Ingest a book for RAG
+      description: Upload and process a book to make it available for question answering
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - content
+              properties:
+                title:
+                  type: string
+                  description: Title of the book
+                  example: "Introduction to Machine Learning"
+                content:
+                  type: string
+                  description: Full content of the book
+                  example: "Chapter 1: Introduction to ML concepts..."
+                metadata:
+                  type: object
+                  description: Additional metadata about the book
+                  example:
+                    author: "John Doe"
+                    year: 2024
+                    isbn: "123-456-789"
+      responses:
+        '200':
+          description: Book successfully ingested
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  book_id:
+                    type: string
+                    example: "book-123"
+                  message:
+                    type: string
+                    example: "Book successfully ingested and indexed"
+                  chunk_count:
+                    type: integer
+                    example: 150
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Title and content are required"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Failed to process and index book"
+  /books:
+    get:
+      summary: List available books
+      description: Get a list of all books available for question answering
+      responses:
+        '200':
+          description: List of available books
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  books:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: "book-123"
+                        title:
+                          type: string
+                          example: "Introduction to Machine Learning"
+                        author:
+                          type: string
+                          example: "John Doe"
+                        chunk_count:
+                          type: integer
+                          example: 150
+                        created_at:
+                          type: string
+                          format: date-time
+                          example: "2025-01-13T10:00:00Z"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Failed to retrieve books list"

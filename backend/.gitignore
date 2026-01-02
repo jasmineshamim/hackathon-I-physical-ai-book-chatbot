@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.gitgnore
+*.pot
+*.pyc
+*.pyo
+*.so
+*.egg-info/
+.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+.env.dev
+.env.prod
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+htmlcov/
+.hypothesis/
+
+# Docker
+.dockerignore
+docker-compose*.yml
+
+# Database
+*.db
+*.db-journal
+
+# Logs
+logs/
+*.log
+
+# Process
+*.pid
+
+# Coverage
+.coverage*
