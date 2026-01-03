@@ -11,7 +11,7 @@ const config: Config = {
     v4: true,
   },
 
-url: 'https://hackathon-i-physical-ai-book-chatbot-q75dbtepf.vercel.app',
+url: 'https://hackathon-i-physical-ai-book-chatbo.vercel.app/',
 baseUrl: '/',
 
   organizationName: 'jasmineshamim',
