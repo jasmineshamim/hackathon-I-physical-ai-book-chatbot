@@ -13,9 +13,9 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Testing/debugging. Replace with your frontend domain for production
+    allow_origins=["*"],  # For dev/testing; replace with frontend domain in prod
     allow_credentials=True,
-    allow_methods=["GET", "POST", "OPTIONS"],  # Preflight explicitly allowed
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
@@ -23,19 +23,24 @@ app.add_middleware(
 app.include_router(chat_router, prefix="/api/v1")
 app.include_router(api_router, prefix="/api")
 
-# Manual preflight handler for all /api routes
+# ✅ Manual OPTIONS handler with explicit CORS headers
 @app.options("/api/{rest_of_path:path}")
 async def preflight_api(rest_of_path: str, request: Request):
     """
     Handle OPTIONS preflight for all /api/* routes.
-    This ensures CORS works behind proxies like Railway.
+    Explicitly set CORS headers to satisfy browser.
     """
     return JSONResponse(
         status_code=200,
-        content={"message": "preflight OK"}
+        content={"message": "preflight OK"},
+        headers={
+            "Access-Control-Allow-Origin": "*",  # Replace * with frontend URL in prod
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        },
     )
 
-# Health & root routes
+# Root & health
 @app.get("/")
 async def root():
     return {"status": "server is running"}
