@@ -13,7 +13,7 @@ app = FastAPI(
 # CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Dev/testing, replace with frontend domain for production
+    allow_origins=["https://hackathon-i-physical-ai-book-chatbo.vercel.app/"],  # Dev/testing, replace with frontend domain for production
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
