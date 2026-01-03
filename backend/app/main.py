@@ -4,33 +4,27 @@ from app.api.chat import router as chat_router
 from app.api.router import router as api_router
 
 
-def create_app() -> FastAPI:
-    app = FastAPI(
-        title="RAG Chatbot API",
-        description="A RAG-based chatbot API using Qdrant vector storage and Gemini LLM",
-        version="1.0.0"
-    )
+app = FastAPI(
+    title="RAG Chatbot API",
+    description="API for RAG chatbot integration with Physical AI & Humanoid Robotics book",
+    version="1.0.0"
+)
 
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-    
-
-    # Include API routers
-    app.include_router(chat_router, prefix="/api/v1")
-    app.include_router(api_router, prefix="/api")  # For direct API access without versioning
-
-    return app
-
-
-app = create_app()
-
+@app.get("/")
+async def root():
+    return {"status": "server is running"}
 
 @app.get("/health")
-async def health_check():
-    return {"status": "healthy", "message": "RAG Chatbot API is running"}
+async def health():
+    return {"status": "healthy"}
+
+app.include_router(chat_router, prefix="/api/v1")
+app.include_router(api_router, prefix="/api")  # For direct API access without versioning
