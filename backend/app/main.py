@@ -6,35 +6,31 @@ from app.api.router import router as api_router
 
 app = FastAPI(
     title="RAG Chatbot API",
-    description="API for RAG chatbot integration with Physical AI & Humanoid Robotics book",
+    description="API for RAG chatbot integration",
     version="1.0.0"
 )
 
-# CORS middleware
+# CORS Middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For dev/testing; replace with frontend domain in prod
+    allow_origins=["*"],  # Dev/testing, replace with frontend domain for production
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
 
-# Include routers
+# Routers
 app.include_router(chat_router, prefix="/api/v1")
 app.include_router(api_router, prefix="/api")
 
-# ✅ Manual OPTIONS handler with explicit CORS headers
+# ✅ Manual preflight for all /api/* routes with headers
 @app.options("/api/{rest_of_path:path}")
 async def preflight_api(rest_of_path: str, request: Request):
-    """
-    Handle OPTIONS preflight for all /api/* routes.
-    Explicitly set CORS headers to satisfy browser.
-    """
     return JSONResponse(
         status_code=200,
         content={"message": "preflight OK"},
         headers={
-            "Access-Control-Allow-Origin": "*",  # Replace * with frontend URL in prod
+            "Access-Control-Allow-Origin": "*",  # replace * with frontend domain in prod
             "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
             "Access-Control-Allow-Headers": "Content-Type, Authorization",
         },
