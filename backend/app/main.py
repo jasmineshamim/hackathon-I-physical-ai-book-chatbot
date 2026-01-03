@@ -4,44 +4,42 @@ from fastapi.responses import JSONResponse
 from app.api.chat import router as chat_router
 from app.api.router import router as api_router
 
-# Create FastAPI app
 app = FastAPI(
     title="RAG Chatbot API",
     description="API for RAG chatbot integration with Physical AI & Humanoid Robotics book",
     version="1.0.0"
 )
 
-# Robust CORS Middleware
+# CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],         # Temporary for dev/testing
+    allow_origins=["*"],  # Testing/debugging. Replace with your frontend domain for production
     allow_credentials=True,
-    allow_methods=["*"],         # GET, POST, OPTIONS etc.
+    allow_methods=["GET", "POST", "OPTIONS"],  # Preflight explicitly allowed
     allow_headers=["*"],
 )
 
-# Root route
-@app.get("/")
-async def root():
-    return {"status": "server is running"}
-
-# Health check
-@app.get("/health")
-async def health():
-    return {"status": "healthy"}
-
 # Include routers
 app.include_router(chat_router, prefix="/api/v1")
-app.include_router(api_router, prefix="/api")  # For direct API access
+app.include_router(api_router, prefix="/api")
 
-# === Manual OPTIONS handler for preflight requests ===
-@app.options("/{full_path:path}")
-async def preflight_handler(full_path: str, request: Request):
+# Manual preflight handler for all /api routes
+@app.options("/api/{rest_of_path:path}")
+async def preflight_api(rest_of_path: str, request: Request):
     """
-    Handle OPTIONS preflight requests for any route.
-    Returns 200 OK so browser CORS checks pass.
+    Handle OPTIONS preflight for all /api/* routes.
+    This ensures CORS works behind proxies like Railway.
     """
     return JSONResponse(
         status_code=200,
         content={"message": "preflight OK"}
     )
+
+# Health & root routes
+@app.get("/")
+async def root():
+    return {"status": "server is running"}
+
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
