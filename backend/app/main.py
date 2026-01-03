@@ -14,7 +14,7 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=[
-            "https://hackathon-i-physical-ai-book-chatbot.vercel.app",  # fixed typo
+            "https://hackathon-i-physical-ai-book-chatbot-q75dbtepf.vercel.app",  # fixed typo
             "http://localhost:3000"
         ],
         allow_credentials=True,
