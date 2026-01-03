@@ -11,14 +11,18 @@ def create_app() -> FastAPI:
         version="1.0.0"
     )
 
-    # Add CORS middleware
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=["*"],  # In production, replace with specific origins
+        allow_origins=[
+            "https://hackathon-i-physical-ai-book-chatbot.vercel.app",  # fixed typo
+            "http://localhost:3000"
+        ],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+    
 
     # Include API routers
     app.include_router(chat_router, prefix="/api/v1")

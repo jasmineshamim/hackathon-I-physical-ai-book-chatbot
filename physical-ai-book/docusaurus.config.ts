@@ -11,8 +11,8 @@ const config: Config = {
     v4: true,
   },
 
-  url: 'https://jasmineshamim.github.io',
-  baseUrl: '/hackathon-I-physical-ai-book/',
+url: 'https://hackathon-i-physical-ai-book-chatbo.vercel.app',
+baseUrl: '/',
 
   organizationName: 'jasmineshamim',
   projectName: 'hackathon-I-physical-ai-book',

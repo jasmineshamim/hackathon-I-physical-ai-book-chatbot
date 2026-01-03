@@ -354,8 +354,10 @@ const FloatingChatbot = () => {
     setIsLoading(true);
     setError(null);
 
+    let API = "https://hackathon-i-physical-ai-book-chatbot-production.up.railway.app/api/query"
+
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/query', {
+      const response = await fetch(API, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
