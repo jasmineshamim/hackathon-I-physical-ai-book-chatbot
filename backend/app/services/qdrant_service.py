@@ -8,45 +8,57 @@ class QdrantService:
     def __init__(self):
         # Use the collection name from .env if available, otherwise default
         self.collection_name = getattr(settings, 'qdrant_collection_name', settings.qdrant_collection)
+        self.client = None
+        self.fallback_mode = False
 
-        # Check if we have a full URL (cloud instance) or need to construct from host/port
-        if settings.qdrant_url:
-            # Cloud instance with full URL
-            if settings.qdrant_api_key:
-                self.client = QdrantClient(
-                    url=settings.qdrant_url,
-                    api_key=settings.qdrant_api_key,
-                    timeout=10
-                )
+        try:
+            # Check if we have a full URL (cloud instance) or need to construct from host/port
+            if settings.qdrant_url:
+                # Cloud instance with full URL
+                if settings.qdrant_api_key:
+                    self.client = QdrantClient(
+                        url=settings.qdrant_url,
+                        api_key=settings.qdrant_api_key,
+                        timeout=10
+                    )
+                else:
+                    self.client = QdrantClient(
+                        url=settings.qdrant_url,
+                        timeout=10
+                    )
+            elif settings.qdrant_host and settings.qdrant_port:
+                # Local instance with host and port
+                if settings.qdrant_api_key:
+                    self.client = QdrantClient(
+                        host=settings.qdrant_host,
+                        port=settings.qdrant_port,
+                        api_key=settings.qdrant_api_key,
+                        timeout=10
+                    )
+                else:
+                    self.client = QdrantClient(
+                        host=settings.qdrant_host,
+                        port=settings.qdrant_port,
+                        timeout=10
+                    )
             else:
-                self.client = QdrantClient(
-                    url=settings.qdrant_url,
-                    timeout=10
-                )
-        elif settings.qdrant_host and settings.qdrant_port:
-            # Local instance with host and port
-            if settings.qdrant_api_key:
-                self.client = QdrantClient(
-                    host=settings.qdrant_host,
-                    port=settings.qdrant_port,
-                    api_key=settings.qdrant_api_key,
-                    timeout=10
-                )
-            else:
-                self.client = QdrantClient(
-                    host=settings.qdrant_host,
-                    port=settings.qdrant_port,
-                    timeout=10
-                )
-        else:
-            raise ValueError("Either QDRANT_URL or both QDRANT_HOST and QDRANT_PORT must be set")
+                raise ValueError("Either QDRANT_URL or both QDRANT_HOST and QDRANT_PORT must be set")
 
-        self._create_collection_if_not_exists()
+            self._create_collection_if_not_exists()
+        except Exception as e:
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(f"Qdrant initialization failed, using fallback mode: {e}")
+            self.fallback_mode = True
+            self.client = None
 
     def _create_collection_if_not_exists(self):
         """
         Create the collection if it doesn't exist
         """
+        if self.fallback_mode or not self.client:
+            return
+
         try:
             # Check if collection exists
             self.client.get_collection(self.collection_name)
@@ -105,22 +117,29 @@ class QdrantService:
         """
         Search for similar vectors in the collection
         """
+        if self.fallback_mode:
+            # Return empty results in fallback mode
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning("Qdrant in fallback mode, returning empty search results")
+            return []
+
         try:
-            results = self.client.search(
+            results = self.client.query_points(
                 collection_name=self.collection_name,
-                query_vector=query_vector,
+                query=query_vector,
                 limit=limit,
                 with_payload=True
             )
-            
+
             return [
                 {
-                    "id": result.id,
-                    "text": result.payload.get("text", ""),
-                    "metadata": {k: v for k, v in result.payload.items() if k != "text"},
-                    "score": result.score
+                    "id": point.id,
+                    "text": point.payload.get("text", ""),
+                    "metadata": {k: v for k, v in point.payload.items() if k != "text"},
+                    "score": point.score
                 }
-                for result in results
+                for point in results.points
             ]
         except Exception as e:
             raise Exception(f"Error searching in Qdrant: {str(e)}")
