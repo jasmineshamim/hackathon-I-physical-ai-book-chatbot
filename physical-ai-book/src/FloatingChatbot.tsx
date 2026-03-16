@@ -372,15 +372,12 @@ const FloatingChatbot: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch("https://jasminesheikh12-hackathon-1.hf.space/api/query", {
+      const response = await fetch("https://hackathon-i-physical-ai-book-chatbot-production.up.railway.app/api/query", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          question: inputValue,
-          book_id: "physical-ai-book"
-        }),
+        body: JSON.stringify({ question: inputValue }),
       });
 
       if (!response.ok) {
