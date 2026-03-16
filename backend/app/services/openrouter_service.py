@@ -16,7 +16,7 @@ class OpenRouterService:
 
     def generate_response(self, messages: List[Dict[str, str]], context: str = None) -> str:
         """
-        Generate response using OpenRouter API
+        Generate response using OpenRouter API with fallback
         """
         try:
             # If context is provided, add it to the messages
@@ -45,7 +45,8 @@ class OpenRouterService:
             response = requests.post(
                 f"{self.base_url}/chat/completions",
                 headers=headers,
-                data=json.dumps(data)
+                data=json.dumps(data),
+                timeout=30
             )
 
             if response.status_code != 200:
@@ -58,4 +59,25 @@ class OpenRouterService:
 
             return response_data["choices"][0]["message"]["content"]
         except Exception as e:
-            raise Exception(f"Error generating response with OpenRouter: {str(e)}")
+            # Fallback response when LLM is unavailable
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(f"LLM unavailable, using fallback response: {str(e)}")
+
+            # Extract user question from messages
+            user_question = ""
+            for msg in messages:
+                if msg.get("role") == "user":
+                    user_question = msg.get("content", "")
+
+            return f"""I'm currently running in limited mode due to API limitations.
+
+Your question: "{user_question}"
+
+I'm a chatbot designed to help with Physical AI and Humanoid Robots topics. While I can't provide a detailed AI-generated response right now, here are some general insights:
+
+Physical AI refers to artificial intelligence systems that interact with and operate in the physical world, often through robotics and embodied agents. This includes humanoid robots, autonomous vehicles, and other systems that perceive and act in physical environments.
+
+For more detailed information, please check the documentation or try again later when the AI service is available.
+
+Note: The system is operational but the LLM service is temporarily unavailable. Please contact the administrator to configure a working LLM API."""

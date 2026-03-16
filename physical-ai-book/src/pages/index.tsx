@@ -4,10 +4,9 @@ import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import HomepageFeatures from '@site/src/components/HomepageFeatures';
+import HolographicRobot from '@site/src/components/HolographicRobot/HolographicRobot';
 
 import Heading from '@theme/Heading';
-import Chatbot from '@site/components/Chatbot';
-import FloatingChatbot from '../FloatingChatbot';
 
 const HomepageHeader = () => {
   const { siteConfig } = useDocusaurusContext();
@@ -32,33 +31,13 @@ const HomepageHeader = () => {
           </div>
         </div>
 
-        {/* Right Hero Image */}
+        {/* Right Hero - Holographic Robot */}
         <div className="hero-image-content">
-          <img
-            src="/img/home.png"
-            alt="Physical AI and Humanoid Robotics"
-            className="hero-image"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
-              const parent = target.parentElement;
-              if (parent) {
-                parent.style.display = 'none';
-                // Also adjust the text content to be centered when image is removed
-                const textContent = document.querySelector('.hero-text-content');
-                if (textContent) {
-                  textContent.classList.add('text-centered');
-                }
-              }
-            }}
-          />
-          {/* Glow effect */}
-          <div className="hero-glow-effect"></div>
+          <HolographicRobot />
         </div>
       </div>
-      <FloatingChatbot/>
     </header>
-  
+
   );
 };
 

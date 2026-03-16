@@ -1,5 +1,5 @@
-import {themes as prismThemes} from 'prism-react-renderer';
-import type {Config} from '@docusaurus/types';
+import { themes as prismThemes } from 'prism-react-renderer';
+import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
@@ -11,8 +11,8 @@ const config: Config = {
     v4: true,
   },
 
-url: 'https://hackathon-i-physical-ai-book-chatbo.vercel.app/',
-baseUrl: '/',
+  url: 'https://hackathon-i-physical-ai-book-chatbo.vercel.app',
+  baseUrl: '/',
 
   organizationName: 'jasmineshamim',
   projectName: 'hackathon-I-physical-ai-book',
@@ -40,17 +40,7 @@ baseUrl: '/',
     ],
   ],
 
-  plugins: [
-    // Add the floating chatbot as a global client module
-    async function chatbotPlugin(context, options) {
-      return {
-        name: 'floating-chatbot-plugin',
-        getClientModules() {
-          return [require.resolve('./src/modules/ClientModule.jsx')];
-        },
-      };
-    },
-  ],
+  plugins: [],
 
   themeConfig: {
     image: 'img/docusaurus-social-card.jpg',
@@ -63,35 +53,35 @@ baseUrl: '/',
     },
 
     navbar: {
-  title: 'Physical AI and Humanoid Robots',
-  logo: {
-    alt: 'Physical AI Logo',
-    src: 'img/home.png',
-    width: 32,
-    height: 32,
-  },
-  items: [
-    {
-      type: 'dropdown',
-      label: 'Book',
-      position: 'left',
+      title: 'Physical AI and Humanoid Robots',
+      logo: {
+        alt: 'Physical AI Logo',
+        src: 'img/home.png',
+        width: 32,
+        height: 32,
+      },
       items: [
-        { label: 'Module 1: Introduction to Physical AI', to: '/docs/module1-intro' },
-        { label: 'Module 2: Core Robotics Programming with ROS 2', to: '/docs/module2-ros2' },
-        { label: 'Module 3: Simulating Robots in a Virtual World', to: '/docs/module3-digital-twin' },
-        { label: 'Module 4: Building the Robot\'s Brain: AI and Navigation', to: '/docs/module4-ai-robot-brain' },
-        { label: 'Module 5: Advanced Topics in Humanoid Robotics', to: '/docs/module5-advanced-topics' },
-        { label: 'Module 6: Hardware & Lab Setup', to: '/docs/hardware-lab-setup' },
+        {
+          type: 'dropdown',
+          label: 'Book',
+          position: 'left',
+          items: [
+            { label: 'Module 1: Introduction to Physical AI', to: '/docs/module1-intro' },
+            { label: 'Module 2: Core Robotics Programming with ROS 2', to: '/docs/module2-ros2' },
+            { label: 'Module 3: Simulating Robots in a Virtual World', to: '/docs/module3-digital-twin' },
+            { label: 'Module 4: Building the Robot\'s Brain: AI and Navigation', to: '/docs/module4-ai-robot-brain' },
+            { label: 'Module 5: Advanced Topics in Humanoid Robotics', to: '/docs/module5-advanced-topics' },
+            { label: 'Module 6: Hardware & Lab Setup', to: '/docs/hardware-lab-setup' },
+          ],
+        },
+        {
+          href: 'https://github.com/facebook/docusaurus',
+          label: 'GitHub',
+          position: 'right',
+          className: 'navbar-github-link', // ✅ this is allowed
+        },
       ],
     },
-    {
-      href: 'https://github.com/facebook/docusaurus',
-      label: 'GitHub',
-      position: 'right',
-      className: 'navbar-github-link', // ✅ this is allowed
-    },
-  ],
-},
 
 
     footer: {

@@ -25,6 +25,15 @@
   --neon-green: #00FF00;
   --dark-teal: #004d40;
   --deep-blue: #00008b;
+
+  /* Unified Dark Background Colors */
+  --ifm-background-color: #0A0E2A;
+  --ifm-background-surface-color: #0D1235;
+  --ifm-navbar-background-color: #070B20;
+  --ifm-footer-background-color: #060918;
+  --ifm-color-content: #E8F4FF;
+  --ifm-toc-background-color: #0A0E2A;
+  --ifm-sidebar-background-color: #0A0E2A;
 }
 
 /* For dark mode */
@@ -42,6 +51,31 @@ html[data-theme='dark'] {
   --neon-green: #39FF14;
   --dark-teal: #002e26;
   --deep-blue: #00005a;
+
+  /* Unified Dark Background Colors */
+  --ifm-background-color: #0A0E2A;
+  --ifm-background-surface-color: #0D1235;
+  --ifm-navbar-background-color: #070B20;
+  --ifm-footer-background-color: #060918;
+  --ifm-toc-background-color: #0A0E2A;
+  --ifm-sidebar-background-color: #0A0E2A;
+}
+
+/* Global Background Override - No Gradients */
+html, body {
+  background-color: #0A0E2A !important;
+  background-image: none !important;
+}
+
+.main-wrapper,
+.docMainContainer,
+.docPage,
+article,
+.theme-doc-sidebar-container,
+.navbar,
+.footer {
+  background-color: transparent !important;
+  background-image: none !important;
 }
 
 /* Glass Navbar Effect */
@@ -70,7 +104,8 @@ html[data-theme='dark'] .navbar {
   display: flex;
   align-items: center;
   min-height: 100vh; /* Full viewport height */
-  background: linear-gradient(135deg, var(--dark-teal) 0%, var(--deep-blue) 100%);
+  background: #0A0E2A !important; /* Solid dark navy background */
+  background-image: none !important; /* Remove any gradient */
   color: white;
   padding: 0; /* Remove default padding */
 }
@@ -263,7 +298,8 @@ html[data-theme='dark'] .navbar {
 
 /* Modern Footer Styles */
 .footer {
-  background: linear-gradient(135deg, var(--dark-teal) 0%, var(--deep-blue) 100%);
+  background: #060918 !important; /* Solid dark background */
+  background-image: none !important; /* Remove gradient */
   color: white;
   padding: 4rem 2rem 2rem;
 }
@@ -442,4 +478,375 @@ html[data-theme='dark'] .navbar {
 .dropdown__menu > .dropdown__submenu > .dropdown__link {
   font-weight: 600;
   color: var(--neon-cyan);
+}
+
+/* ========================================
+   FUTURISTIC ANIMATIONS & ENHANCEMENTS
+   ======================================== */
+
+/* Import Futuristic Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800&family=Exo+2:wght@300;400;600;700&display=swap');
+
+/* Apply futuristic fonts */
+h1, h2, h3, .hero-title, .sectionTitle {
+  font-family: 'Orbitron', sans-serif;
+}
+
+body {
+  font-family: 'Exo 2', system-ui, -apple-system, sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00bcd4, #00e5ff);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #00e5ff, #00bcd4);
+}
+
+/* ========================================
+   KEYFRAME ANIMATIONS
+   ======================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+  }
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+  }
+}
+
+/* ========================================
+   HERO SECTION ANIMATIONS
+   ======================================== */
+
+/* Hero title animation */
+.hero-title {
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+/* Hero subtitle animation */
+.hero-subtitle {
+  animation: fadeInUp 0.6s ease-out 0.3s;
+  animation-fill-mode: both;
+}
+
+/* Hero button animation */
+.hero-buttons {
+  animation: scaleIn 0.6s ease-out 0.5s;
+  animation-fill-mode: both;
+}
+
+/* Floating robot image */
+.hero-image {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Shimmer effect on buttons */
+.glow-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -200%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.glow-button:hover::before {
+  left: 200%;
+}
+
+/* ========================================
+   SECTION TITLE ANIMATIONS
+   ======================================== */
+
+.sectionTitle {
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Scroll-triggered fade-in class */
+.fade-in-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ========================================
+   MODULE CARDS ANIMATIONS
+   ======================================== */
+
+/* Staggered card animations */
+.topicCard {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease-out;
+}
+
+.topicCard.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger delays for cards */
+.topicCard.visible:nth-child(1) { transition-delay: 0s; }
+.topicCard.visible:nth-child(2) { transition-delay: 0.1s; }
+.topicCard.visible:nth-child(3) { transition-delay: 0.15s; }
+.topicCard.visible:nth-child(4) { transition-delay: 0.2s; }
+.topicCard.visible:nth-child(5) { transition-delay: 0.25s; }
+.topicCard.visible:nth-child(6) { transition-delay: 0.3s; }
+
+/* Enhanced card hover with gradient border */
+.topicCard::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, #00bcd4, #9c27b0, #00bcd4);
+  border-radius: 12px;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+.topicCard:hover::after {
+  opacity: 1;
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+/* Button shimmer on hover */
+.topicButton {
+  position: relative;
+  overflow: hidden;
+}
+
+.topicButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -200%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+}
+
+.topicButton:hover::before {
+  animation: shimmer 0.8s ease;
+}
+
+/* ========================================
+   DOCS PAGE ANIMATIONS
+   ======================================== */
+
+/* Main content fade-in */
+article {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Page title slide-in */
+article h1 {
+  animation: fadeInLeft 0.5s ease-out;
+}
+
+/* Heading glow on scroll */
+article h2, article h3 {
+  position: relative;
+  padding-left: 1rem;
+  transition: all 0.3s ease;
+}
+
+article h2::before, article h3::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #00bcd4, #00e5ff);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+article h2.visible::before, article h3.visible::before {
+  opacity: 1;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* List items staggered animation */
+article ul li, article ol li {
+  opacity: 0;
+  transform: translateX(-10px);
+  animation: fadeInLeft 0.4s ease-out forwards;
+}
+
+article ul li:nth-child(1), article ol li:nth-child(1) { animation-delay: 0s; }
+article ul li:nth-child(2), article ol li:nth-child(2) { animation-delay: 0.08s; }
+article ul li:nth-child(3), article ol li:nth-child(3) { animation-delay: 0.16s; }
+article ul li:nth-child(4), article ol li:nth-child(4) { animation-delay: 0.24s; }
+article ul li:nth-child(5), article ol li:nth-child(5) { animation-delay: 0.32s; }
+article ul li:nth-child(6), article ol li:nth-child(6) { animation-delay: 0.4s; }
+
+/* Code blocks animation */
+article pre {
+  position: relative;
+  animation: fadeInUp 0.5s ease-out;
+  border-left: 3px solid #00bcd4;
+}
+
+/* ========================================
+   NAVBAR ENHANCEMENTS
+   ======================================== */
+
+.navbar {
+  border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+  box-shadow: 0 2px 10px rgba(0, 255, 255, 0.2);
+}
+
+/* ========================================
+   FOOTER ANIMATIONS
+   ======================================== */
+
+.footer__links {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out 0.2s forwards;
+}
+
+.footer__link-item a {
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.footer__link-item a:hover {
+  color: var(--neon-cyan);
+  transform: translateX(5px);
+}
+
+/* ========================================
+   TABLE OF CONTENTS (Right Sidebar)
+   ======================================== */
+
+.table-of-contents__link--active {
+  color: var(--neon-cyan) !important;
+  border-left: 2px solid var(--neon-cyan);
+  padding-left: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+/* Hero container - no special styling needed, inherits from parent */
+.hero-container {
+  position: relative;
+  z-index: 1;
 }

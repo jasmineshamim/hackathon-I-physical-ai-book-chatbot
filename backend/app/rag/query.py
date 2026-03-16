@@ -1,3 +1,4 @@
+import logging
 from typing import List, Dict, Any
 from app.core.config import settings
 from app.services.qdrant_service import QdrantService
@@ -5,24 +6,29 @@ from app.services.cohere_service import CohereService
 import openai
 import os
 
+logger = logging.getLogger(__name__)
 
 class RAGQueryService:
     def __init__(self):
-        # Initialize Qdrant service
-        self.qdrant_service = QdrantService()
-        # Initialize Cohere service for embeddings
-        self.cohere_service = CohereService()
+        try:
+            # Initialize Qdrant service
+            self.qdrant_service = QdrantService()
+            # Initialize Cohere service for embeddings
+            self.cohere_service = CohereService()
 
-        # Configure OpenAI client for LLM responses
-        openrouter_api_key = settings.OPENROUTER_API_KEY or os.getenv("OPENROUTER_API_KEY")
-        if not openrouter_api_key:
-            raise ValueError("OPENROUTER_API_KEY environment variable is not set")
+            # Configure OpenAI client for LLM responses
+            openrouter_api_key = settings.OPENROUTER_API_KEY or os.getenv("OPENROUTER_API_KEY")
+            if not openrouter_api_key:
+                raise ValueError("OPENROUTER_API_KEY environment variable is not set")
 
-        self.openai_client = openai.OpenAI(
-            base_url=settings.OPENROUTER_BASE_URL,
-            api_key=openrouter_api_key,
-        )
-        self.model_name = settings.OPENROUTER_MODEL_NAME
+            self.openai_client = openai.OpenAI(
+                base_url=settings.OPENROUTER_BASE_URL,
+                api_key=openrouter_api_key,
+            )
+            self.model_name = settings.OPENROUTER_MODEL_NAME
+        except Exception as e:
+            logger.error(f"Error initializing RAGQueryService: {e}", exc_info=True)
+            raise
 
     def query_with_sources(self, user_question: str, chat_history: List[Dict[str, str]] = None):
         """
@@ -78,4 +84,5 @@ class RAGQueryService:
 
             return llm_response, sources
         except Exception as e:
+            logger.error(f"Error in RAG query: {e}", exc_info=True)
             raise Exception(f"Error in RAG query: {str(e)}")

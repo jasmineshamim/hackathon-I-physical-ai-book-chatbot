@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import Link from '@docusaurus/Link';
 import styles from './styles.module.css';
+import { useEffect, useRef } from 'react';
 
 type FeatureItem = {
   moduleNumber: string;
@@ -75,9 +76,34 @@ const FeatureList: FeatureItem[] = [
 ];
 
 function Feature({moduleNumber, title, description, to}: FeatureItem) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (cardRef.current) {
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      if (cardRef.current) {
+        observer.unobserve(cardRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="col col--4">
-      <div className={styles.topicCard}>
+      <div ref={cardRef} className={styles.topicCard}>
         <div className={styles.moduleNumber}>{moduleNumber}</div>
         <div className={styles.topicContent}>
           <Heading as="h3" className={styles.topicTitle}>{title}</Heading>
@@ -92,11 +118,33 @@ function Feature({moduleNumber, title, description, to}: FeatureItem) {
 }
 
 export default function HomepageFeatures(): ReactNode {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      const title = sectionRef.current.querySelector(`.${styles.sectionTitle}`);
+      if (title) observer.observe(title);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section className={styles.features}>
-      <div className="container">
+      <div className="container" ref={sectionRef}>
         <div className="text--center padding-bottom--lg">
-          <Heading as="h2" className={styles.sectionTitle}>Book Modules</Heading>
+          <Heading as="h2" className={`${styles.sectionTitle} fade-in-scroll`}>Book Modules</Heading>
           <p className={styles.sectionSubtitle}>Explore the comprehensive curriculum covering Physical AI and Humanoid Robotics</p>
         </div>
         <div className="row">

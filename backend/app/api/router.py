@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from app.schemas.schemas import QueryRequest, QueryResponse, AddDocumentRequest, AddDocumentResponse
 from app.services.rag_service import RAGService
+from app.services.simple_rag_service import SimpleRAGService
 from app.config.settings import settings
 from typing import List
 import logging
@@ -11,23 +12,27 @@ router = APIRouter()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Initialize simple RAG service as fallback
+simple_rag = None
 
 def get_rag_service():
     """
     Dependency function to get RAG service instance.
-    This allows lazy initialization only when needed.
+    Uses SimpleRAGService directly since Qdrant is unavailable.
     """
-    try:
-        return RAGService()
-    except Exception as e:
-        logger.error(f"Error initializing RAG service: {e}")
-        raise HTTPException(status_code=503, detail=f"Service unavailable: {str(e)}")
+    global simple_rag
+
+    # Use SimpleRAGService directly for now
+    logger.info("Using SimpleRAGService for document retrieval")
+    if simple_rag is None:
+        simple_rag = SimpleRAGService()
+    return simple_rag
 
 
 @router.post("/query", response_model=QueryResponse)
-async def query_endpoint(request: QueryRequest, rag_service: RAGService = Depends(get_rag_service)):
+async def query_endpoint(request: QueryRequest, rag_service = Depends(get_rag_service)):
     try:
-        # Process the query through the RAG service
+        # Process the query through the RAG service (works with both RAGService and SimpleRAGService)
         response = rag_service.query(
             user_question=request.question,
             chat_history=request.chat_history
