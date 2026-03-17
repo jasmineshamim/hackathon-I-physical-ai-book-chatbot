@@ -35,7 +35,7 @@ const Chatbot = ({ bookId = 'constitution' }) => {
         },
         body: JSON.stringify({
           question: inputValue,
-          book_id: bookId,
+          book_id: "physical-ai-book"
         }),
       });
 

@@ -15,9 +15,9 @@ def retrieve_relevant_chunks(query: str, book_id: str, top_k: int = 5) -> List[D
     query_embedding = generate_single_embedding(query)
     
     # Perform semantic search in Qdrant
-    search_results = client.search(
+    search_results = client.query_points(
         collection_name=settings.qdrant_collection_name,
-        query_vector=query_embedding,
+        query=query_embedding,
         query_filter=models.Filter(
             must=[
                 models.FieldCondition(
@@ -27,7 +27,7 @@ def retrieve_relevant_chunks(query: str, book_id: str, top_k: int = 5) -> List[D
             ]
         ),
         limit=top_k
-    )
+    ).points
     
     # Extract relevant information from search results
     relevant_chunks = []
@@ -54,9 +54,9 @@ def retrieve_chunks_by_selection(selected_text: str, book_id: str) -> List[Dict[
     selected_text_embedding = generate_single_embedding(selected_text)
     
     # Perform semantic search in Qdrant for the specific book
-    search_results = client.search(
+    search_results = client.query_points(
         collection_name=settings.qdrant_collection_name,
-        query_vector=selected_text_embedding,
+        query=selected_text_embedding,
         query_filter=models.Filter(
             must=[
                 models.FieldCondition(
@@ -66,7 +66,7 @@ def retrieve_chunks_by_selection(selected_text: str, book_id: str) -> List[Dict[
             ]
         ),
         limit=10  # Retrieve more chunks to ensure we get the relevant context
-    )
+    ).points
     
     # Extract relevant information from search results
     relevant_chunks = []
