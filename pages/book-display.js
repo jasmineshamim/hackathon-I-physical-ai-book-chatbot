@@ -26,7 +26,7 @@ const BookPage = () => {
         },
         body: JSON.stringify({
           question: userMessage.text,
-          book_id: "physical-ai-book"
+          module_name: "general"
         }),
       });
 

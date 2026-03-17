@@ -379,7 +379,7 @@ const FloatingChatbot: React.FC = () => {
         },
         body: JSON.stringify({
           question: inputValue,
-          book_id: "physical-ai-book"
+          module_name: "general"
         }),
       });
 
